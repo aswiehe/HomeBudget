@@ -1,7 +1,8 @@
 <?php   
     require_once("./php_classes/class_autoloader.php");
     $config = new Config();
-    // $config->configure_from_scratch();
+    $config->configure_from_scratch();
+    die;
     $config->log_new('env.log', "Config object created");
     $config->attach('/functions/db.php');
     echo test_db_connection();
