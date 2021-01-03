@@ -2,67 +2,37 @@
 
 class Config {
 
-    private $root = __DIR__;
+    private $root;
     private $log_directory;
-    private $log_files = array();
-    private $log_paths = array();
-    private $master_log_file = 'master.log';
-    private $log_file_permissions = 0644;
-    private $db_host = 'localhost';
-    private $db_user = 'webapp';
-    private $db_psw = 'b3@nC0wn+r';
-    private $db_schema = 'generic_hook_db';
+    private $log_files;
+    private $log_paths;
+    private $master_log_file;
+    private $log_file_permissions;
+    private $db_host;
+    private $db_user;
+    private $db_psw;
+    private $db_schema;
+    private $webapp_address;
     
     function __construct() {
-        $report_errors = true;
-        $this->error_reporting($report_errors);
-        $this->root = $_SERVER['DOCUMENT_ROOT'];
-        $this->log_directory = './env/log_files/';
-        $this->log_files = array(
-            $this->master_log_file,
-            'env.log',
-            'db.log',
-            'debug.log',
-            'errors.log',
-            'logic.log'
-        );
-        foreach($this->log_files as $log_file) {
-            $log_path = $this->log_directory . $log_file;
-            array_push($this->log_paths, $log_path);
-        }
+
     }
 
-    function attach($path_from_root, $attachment_method = 'require_once') {
-        $attachment_successful = null;
-        switch($attachment_method) {
-            case 'require_once': 
-                $attachment_successful = require_once($this->root . '/' . $path_from_root);
-                break;
-            case 'require': 
-                $attachment_successful = require($this->root . '/' . $path_from_root);
-                break;
-            case 'include_once': 
-                $attachment_successful = include_once($this->root . '/' . $path_from_root);
-                break;
-            case 'include': 
-                $attachment_successful = include($this->root . '/' . $path_from_root);
-                break;
-            default:
-                $this->log_new('errors.log', 'Attempting to attach another file using an unrecognized attachment method');
-                break;
-        }
-        return $attachment_successful;
+    function speak() {
+        return 'hello world';
     }
 
     function dbc() {
-        $mysqli = new mysqli($this->db_host, $this->db_user, $this->db_psw, $this->db_schema);
-        $db_connection_successful = $this->attach("./functions/db.php");
+        // $mysqli = new mysqli($this->db_host, $this->db_user, $this->db_psw, $this->db_schema);
+        $mysqli = new mysqli('localhost', 'webapp', 'b3@nC0wn+r', 'generic_hook_db');
+        $db_connection_successful = attach("./functions/db.php");
         return $mysqli;
     }
 
     function configure_from_scratch() {
-        // Turn on error reporting (turned off by default by constructor when this class instantiated)
-        $this->error_reporting(true);
+        
+        error_reporting(E_ALL);
+        ini_set('display_errors',1);
 
         $successful_master_write = $this->write_log($this->master_log_file, '(This log file has been created)');
         if(!$successful_master_write) {
@@ -103,13 +73,6 @@ class Config {
         return 'Config object instantiated';
     }
 
-    function error_reporting($report_errors) {
-        if($report_errors) {
-            error_reporting(E_ALL);
-            ini_set('display_errors',1);
-        }
-    }
-
     function verify_log_file($log_file) { // CHECK FILE PERMISSIONS!!! (if this function is giving unexpected problems)
         $log_file_verified = null;
         $verification_message_options = array(
@@ -122,9 +85,20 @@ class Config {
         );
         $verification_message = $verification_message_options[0];
         $log_path = $this->log_directory . $log_file;
-
-
-        if(in_array($log_path, $this->log_paths)) { // Log file was defined defined within the application -> continuing verification
+        $log_paths = $this->log_paths;
+        
+        $log_paths = array(
+            '/var/www/homebudget/env/log_files/master.log',
+            '/var/www/homebudget/env/log_files/env.log',
+            '/var/www/homebudget/env/log_files/access.log',
+            '/var/www/homebudget/env/log_files/db.log',
+            '/var/www/homebudget/env/log_files/debug.log',
+            '/var/www/homebudget/env/log_files/errors.log',
+            '/var/www/homebudget/env/log_files/logic.log'
+        );
+        // preprint($log_paths);
+        $log_path = '/var/www/homebudget/env/log_files/env.log';
+        if(in_array($log_path, $log_paths)) { // Log file was defined defined within the application -> continuing verification
             if(file_exists($log_path)) { // Log file was defined within the application, and exists at location provided -> continuing verification
                 $handle = fopen($log_path, 'a');
                 if($handle == true) { // Log file was defined within the application, and exists at location provided, and application is able to append (write) to it -> continue verification
@@ -153,8 +127,9 @@ class Config {
         }
         else { // This log file hasn't been defined within the application though it may exist
             $log_file_verified = false;
-            $verification_message = $verification_message_options[5];
-            str_replace('{{}}', "{{$log_path}}", $verification_message);
+            die($log_path);
+            die('$verification_message');
+            $verification_message = $verification_message_options[5] . '{{' . $log_path . '}}';
         }
 
 
@@ -263,6 +238,41 @@ class Config {
         $timestamp = date("Y-m-d H:i:s");
         return $timestamp;
     }
+
+    // ACCESS METHODS
+
+    function set_root($root) {$this->root = $root;}
+    function get_root() {return $this->root;}
+    
+    function set_log_directory($log_directory) {$this->log_directory = $log_directory;}
+    function get_log_directory() {return $this->log_directory;}
+    
+    function set_log_files($log_files) {$this->log_files = $log_files;}
+    function get_log_files() {return $this->log_files;}
+    
+    function set_log_paths($log_paths) {$this->log_paths = $log_paths;}
+    function get_log_paths() {return $this->log_paths;}
+    
+    function set_master_log_file($master_log_file) {$this->master_log_file = $master_log_file;}
+    function get_master_log_file() {return $this->master_log_file;}
+    
+    function set_log_file_permissions($log_file_permissions) {$this->log_file_permissions = $log_file_permissions;}
+    function get_log_file_permissions() {return $this->log_file_permissions;}
+    
+    function set_db_host($db_host) {$this->db_host = $db_host;}
+    function get_db_host() {return $this->db_host;}
+    
+    function set_db_user($db_user) {$this->db_user = $db_user;}
+    function get_db_user() {return $this->db_user;}
+    
+    function set_db_psw($db_psw) {$this->db_psw = $db_psw;}
+    function get_db_psw() {return $this->db_psw;}
+    
+    function set_db_schema($db_schema) {$this->db_schema = $db_schema;}
+    function get_db_schema() {return $this->db_schema;}
+
+    function set_webapp_address($webapp_address) {$this->webapp_address = $webapp_address;}
+    function get_webapp_address() {return $this->webapp_address;}
 
 }
 
