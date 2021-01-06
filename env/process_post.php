@@ -2,9 +2,12 @@
 
     if(session_status() != 2) {
         session_start();
+        require_once($_SERVER['DOCUMENT_ROOT'] . '/functions/env.php');
     }
-    
+
+    return;
     require_once("./php_classes/class_autoloader.php");    
+
 
     $processing_complete = false;
     $backup_counter = 0;

@@ -1,10 +1,11 @@
 <?php
 
+    error_reporting(E_ALL);
+    ini_set('display_errors',1);
     require_once('env/process_post.php');
-
-    // error_reporting(E_ALL);
-    // ini_set('display_errors',1);
     
+    stop('Program completed successfully');
+    // die("<script>alert('Program completed successfully')</script>");
     // if(session_status() != 2) {
     //     session_start();
     // }
