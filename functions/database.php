@@ -5,7 +5,8 @@
     function test_db_connection() {
         $config = new Config();
         // $mysqli = $config->dbc();
-        $mysql = new mysqli('localhost', 'webapp', 'b3@nC0wnTr', 'mysql');
+        $mysqli = new mysqli('localhost', 'root', 'jblMask5&', 'mysql');
+        // $mysqli = new mysqli('localhost', 'webapp', 'b3@nC0wnTr', 'hook');
         $query = "SELECT VERSION();";
         $stmt = $mysqli->prepare($query);
         $stmt->execute();

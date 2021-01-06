@@ -18,7 +18,7 @@
             // attach($functions_file);
         }
         require_once('database.php');
-        test_db_connection();
+        alert("MySQL Version: " . test_db_connection());
     }
 
     function identify_functions_files() {
