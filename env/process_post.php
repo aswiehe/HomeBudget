@@ -4,11 +4,9 @@
         session_start();
         require_once($_SERVER['DOCUMENT_ROOT'] . '/functions/env.php');
     }
-
-    return;
     require_once("./php_classes/class_autoloader.php");    
 
-
+    return;
     $processing_complete = false;
     $backup_counter = 0;
 
@@ -82,26 +80,5 @@
             }
         }
     }
-
-    // require_once("./php_classes/class_autoloader.php");
-    // $serialized_objects = array();
-    // $_POST['serialized_object'] = $serialized_objects;
-
-    // $config_object = new Config();
-    // array_push($serialized_objects, serialize($config_object));
-
-
-    // $config->log_new('env.log', "Config object created");
-    // $config->attach('/functions/db.php');
-    // echo test_db_connection();
-
-    // $db_functions_attachment_message = null;
-    // if($config->dbc()) {
-    //     $db_functions_attachment_message = 'Successfully attached database functions script';
-    // }
-    // else {
-    //     $db_functions_attachment_message = 'Failed to attach database functions script';
-    // }
-    // $config->log_new('env.log', $db_functions_attachment_message);
 
 ?> 

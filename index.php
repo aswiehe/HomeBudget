@@ -2,9 +2,16 @@
 
     error_reporting(E_ALL);
     ini_set('display_errors',1);
+    mysqli_report(MYSQLI_REPORT_ALL);
     require_once('env/process_post.php');
     
-    stop('Program completed successfully');
+    write_log(MASTER_LOG, 'Program completed successfully');
+
+    // create_table();
+    drop_table();
+
+    kill('Program complete');
+    
     // die("<script>alert('Program completed successfully')</script>");
     // if(session_status() != 2) {
     //     session_start();

@@ -1,82 +1,46 @@
 <?php
 
-    define('ROOT', $_SERVER['DOCUMENT_ROOT']);
-    initialize_logs();
-    initialize_function_files();
-
-
-    function initialize_logs() {
-        $log_files = identify_logs();
-        foreach($log_files as $log_file => $log_filepath) {
-            attach($log_filepath);
-        }
-    }
-
-    function initialize_function_files() {
-        $functions_files = identify_functions_files();
-        foreach($functions_files as $functions_file) {
-            // attach($functions_file);
-        }
+    // REQUIRE FILES
+        require_once('env.php');
+        require_once('private.php');
+        require_once('configuration.php');
         require_once('database.php');
-        alert("MySQL Version: " . test_db_connection());
+        require_once('utilities.php');
+    //
+
+    
+    define_logs();
+
+    function define_logs() {
+        define('ROOT', $_SERVER['DOCUMENT_ROOT']);
+        define('MASTER_LOG', ROOT . '/env/log_files/master.log');
+        define('ENV_LOG', ROOT . '/env/log_files/env.log');
+        define('ACCESS_LOG', ROOT . '/env/log_files/access.log');
+        define('DB_LOG', ROOT . '/env/log_files/db.log');
+        define('ERROR_LOG', ROOT . '/env/log_files/error.log');
+        define('REPORT_LOG', ROOT . '/env/log_files/report.log');
     }
 
-    function identify_functions_files() {
-        $functions_files_path = ROOT . '/functions/';
-        $functions_filenames = array(
-            'env.php',
-            'configuration.php',
-            'database.php',
-            'utilities.php',
-        );
-        $functions_files_filepaths = array();
-        foreach($functions_files_filepaths as $functions_files_filepath) {
-            $functions_files_filepaths[$functions_files_filepath] = $functions_files_filepath . $functions_files_filepath;
-        }
-        return $functions_files_filepaths;
+    function write_log($log_path, $message, $access_method = 'a') {
+        $handle = fopen($log_path, $access_method);
+        $timestamp = timestamp();
+        $log_entry_opener = '[' . $timestamp . '] >>> ';
+        $log_text = $log_entry_opener . $message . PHP_EOL;
+        fwrite($handle, $log_text);
+        fclose($handle);
     }
 
-    function identify_logs() {
-        $log_path = ROOT . '/env/log_files/';
-        $log_filenames = array(
-            'master.log',
-            'env.log',
-            'access.log',
-            'db.log',
-            'error.log',
-            'report.log',
-        );
-        $log_filepaths = array();
-        foreach($log_filenames as $log_filename) {
-            $underscored_filename = str_replace('.', '_', $log_filename);
-            $capitalized_filename = strtoupper($underscored_filename);
-            $filename_definition = $capitalized_filename;
-            $log_filepaths[$filename_definition] = $log_path . $log_filename;
-            // Define global log filenames as global variables for easier logging across files
-            define($filename_definition, $log_filename);
-        }
-        return $log_filepaths;
+    function clear_log($log_file) {
+        $write_successful  = write_log($log_file, '(This log file has been cleared)', 'w');
     }
 
-    function attach($file, $attachment_method = 'require_once') {
-        switch($attachment_method) {
-            case 'require_once': require_once($file);
-                break;
-            case 'include_once': include_once($file);
-                break;
-            case 'require': require($file);
-                break;
-            case 'include': include($file);
-                break;
-            case 'require_once': require_once($file);
-                break;
-            case 'require_once': require_once($file);
-                break;
-        }
-    }
-
-    function terminate($termination_message) {
-
+    function clear_all_logs() {
+        clear_log(ENV_LOG);
+        clear_log(ACCESS_LOG);
+        clear_log(DB_LOG);
+        clear_log(ERROR_LOG);
+        clear_log(REPORT_LOG);
+        write_log(MASTER_LOG, '(Cleared all log files, including this one)', 'w');
     }
 
     function kill($message) {
@@ -97,6 +61,17 @@
     function console($message) {
         $console = '<script>console.log("' . $message . '");</script>';
         echo $console;
+    }
+
+    function timestamp() {
+        /*  To be noted about date() format:
+            The date format below matches MySQL DATETIME format, so we'll
+            use that as the default. It is due to this reason of wanting a 
+            default in the first place that we are making this a function
+            in the first place
+        */
+        $timestamp = date("Y-m-d H:i:s");
+        return $timestamp;
     }
 
 ?>
