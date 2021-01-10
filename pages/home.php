@@ -1,6 +1,6 @@
 <?php
 
-    require_once('../env/post_bin.php');
+    require_once('../env/postbin.php');
 
 ?>
 
