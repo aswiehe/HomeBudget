@@ -30,10 +30,6 @@
     //     $session_object = unserialize($_SESSION['state']['config']);
     //     preprint($session_object);
     // }
-    // function clear_logs() {;
-    //     $session_object = unserialize($_SESSION['state']['config']);
-    //     $session_object->clear_all_logs();
-    // }
     // function reset_session() {
     //     session_destroy();
     //     $session_object = unserialize($_SESSION['state']['config']);
@@ -49,29 +45,6 @@
     //     $root = $config_object->get_root();
     //     $file_path = $root . $path_from_root;
     //     return $file_path;
-    // }
-    // function attach($path_from_root, $attachment_method = 'require_once') {
-    //     $file_path = get_file_path($path_from_root);
-    //     $attachment_successful = null;
-    //     switch($attachment_method) {
-    //         case 'require_once': 
-    //             $attachment_successful = require_once($file_path);
-    //             break;
-    //         case 'require': 
-    //             $attachment_successful = require($file_path);
-    //             break;
-    //         case 'include_once': 
-    //             $attachment_successful = include_once($file_path);
-    //             break;
-    //         case 'include': 
-    //             $attachment_successful = include($file_path);
-    //             break;
-    //         default:
-    //             $config_object = get_config();
-    //             $config_object->log_new('errors.log', 'Attempting to attach another file using an unrecognized attachment method');
-    //             break;
-    //     }
-    //     return $attachment_successful;
     // }
 
 

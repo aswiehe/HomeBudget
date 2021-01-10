@@ -29,4 +29,11 @@
         return $db_schema;
     }
 
+    function get_webapp_address() {
+        // $webapp_address = '127.0.0.1';
+        // $webapp_address = 'www.my_webapp.com';
+        $webapp_address = '167.71.84.207';
+        return $webapp_address;
+    }
+
 ?>

@@ -1,7 +1,6 @@
 <?php
 
-    require_once('env/post_bin.php');
-    header('Location: /pages/home.php');
+    require_once('../env/post_bin.php');
 
 ?>
 
@@ -12,10 +11,10 @@
 <body>
     <details>
         <summary>Dashboard</summary>
-        <?php require_once("./env/dashboard.php"); ?>
+        <?php require_once("../env/dashboard.php"); ?>
     </details>
     <h1>
-    INDEX
+    HOME
     </h1>
 </body>
 </html>

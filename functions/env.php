@@ -26,8 +26,14 @@
         $timestamp = timestamp();
         $log_entry_opener = '[' . $timestamp . '] >>> ';
         $log_text = $log_entry_opener . $message . PHP_EOL;
+        if($message == PHP_EOL) {
+            $log_text = PHP_EOL;
+        }
         fwrite($handle, $log_text);
         fclose($handle);
+        if($log_path != MASTER_LOG) {
+            write_log(MASTER_LOG, $message);
+        }
     }
 
     function clear_log($log_file) {
@@ -72,6 +78,19 @@
         */
         $timestamp = date("Y-m-d H:i:s");
         return $timestamp;
+    }
+
+    function reset_session() {
+        session_destroy();
+        write_log(ACCESS_LOG, 'Session destroyed');
+    }
+
+    function show_global_arrays() {
+        $state = array(
+            '$_SESSION' => $_SESSION,
+            '$_POST' => $_POST,
+        );
+        preprint($state);
     }
 
 ?>
