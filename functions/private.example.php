@@ -1,5 +1,7 @@
 <?php
 
+    // MUST RENAME THIS FILE TO private.php !!!!! 
+
     function nudge_private_script() {
         return 'You have nudged the private script, and this sentence is your response';
     }
