@@ -6,33 +6,28 @@
 
     
     function get_db_host() {
-        // $db_host = 'my_databse_host';
-        $db_host = 'localhost';
+        $db_host = 'my_databse_host';
         return $db_host;
     }
 
     function get_db_user() {
-        // $db_user = 'my_database_user';
-        $db_user = 'webapp';
+        $db_user = 'my_database_user';
         return $db_user;
     }
 
     function get_db_password() {
-        // $db_password = 'my_database_password';
-        $db_password = 'b3@nC0wnTr';
+        $db_password = 'my_database_password';
         return $db_password;
     }
 
     function get_db_schema() {
-        // $db_schema = 'my_database_schema';
-        $db_schema = 'generic_hook_db';
+        $db_schema = 'my_database_schema';
         return $db_schema;
     }
 
     function get_webapp_address() {
-        // $webapp_address = '127.0.0.1';
-        // $webapp_address = 'www.my_webapp.com';
-        $webapp_address = '167.71.84.207';
+        $webapp_address = '127.0.0.1';
+        $webapp_address = 'www.my_webapp.com';
         return $webapp_address;
     }
 
